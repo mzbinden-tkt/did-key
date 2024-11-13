@@ -1,0 +1,11 @@
+{
+  "name": "did-key",
+  "version": "1.0.0",
+  "description": "A Node.js service for managing Decentralized Identifiers (DIDs) built with Express and TypeScript. This service provides functionality for creating and managing DID documents.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
