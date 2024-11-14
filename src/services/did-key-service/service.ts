@@ -64,7 +64,10 @@ export function createDIDDocument(
     throw new UnsupportedPublicKeyType();
   }
 
-  if (!mergedOptions.enableExperimentalPublicKeyTypes && !isSupportedKeyFormat(mergedOptions.publicKeyFormat)) {
+  if (
+    !mergedOptions.enableExperimentalPublicKeyTypes &&
+    !isSupportedKeyFormat(mergedOptions.publicKeyFormat)
+  ) {
     throw new InvalidPublicKeyTypeError();
   }
 

@@ -19,7 +19,7 @@ export const findDocumentDid = async (didID: string): Promise<DIDDocument | null
 
     const collection = getCollection();
     const results = await collection.find({ id: didID }).toArray();
-    
+
     if (results.length === 0) {
       return null;
     }

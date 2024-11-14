@@ -12,11 +12,11 @@ describe('DID Controller', () => {
 
   beforeEach(() => {
     mockRequest = {
-      body: {}
+      body: {},
     };
     mockResponse = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     mockNext = jest.fn();
     jest.clearAllMocks();
@@ -25,7 +25,7 @@ describe('DID Controller', () => {
   describe('create DID controller', () => {
     const mockDIDDocument = {
       id: 'did:key:123',
-      verificationMethod: []
+      verificationMethod: [],
     };
 
     beforeEach(() => {
@@ -37,14 +37,10 @@ describe('DID Controller', () => {
       mockRequest.body = {
         method: 'key',
         keyType: 'Ed25519',
-        options: {}
+        options: {},
       };
 
-      await createDIDController(
-        mockRequest as Request,
-        mockResponse as Response,
-        mockNext
-      );
+      await createDIDController(mockRequest as Request, mockResponse as Response, mockNext);
 
       expect(getGeneratorKey).toHaveBeenCalledWith({ type: 'Ed25519' });
       expect(createDIDKey).toHaveBeenCalledWith('Ed25519', 'mock-key', {});
@@ -56,14 +52,10 @@ describe('DID Controller', () => {
       mockRequest.body = {
         method: 'key',
         keyType: 'Secp256k1',
-        options: {}
+        options: {},
       };
 
-      await createDIDController(
-        mockRequest as Request,
-        mockResponse as Response,
-        mockNext
-      );
+      await createDIDController(mockRequest as Request, mockResponse as Response, mockNext);
 
       expect(getGeneratorKey).toHaveBeenCalledWith({ type: 'Secp256k1' });
       expect(createDIDKey).toHaveBeenCalledWith('Secp256k1', 'mock-key', {});
@@ -74,14 +66,10 @@ describe('DID Controller', () => {
     it('should throw BadRequestError for invalid method', async () => {
       mockRequest.body = {
         method: 'invalid',
-        keyType: 'Ed25519'
+        keyType: 'Ed25519',
       };
 
-      await createDIDController(
-        mockRequest as Request,
-        mockResponse as Response,
-        mockNext
-      );
+      await createDIDController(mockRequest as Request, mockResponse as Response, mockNext);
 
       expect(mockNext).toHaveBeenCalledWith(expect.any(BadRequestError));
       expect(createDIDKey).not.toHaveBeenCalled();
@@ -90,14 +78,10 @@ describe('DID Controller', () => {
     it('should throw BadRequestError for invalid keyType', async () => {
       mockRequest.body = {
         method: 'key',
-        keyType: 'InvalidKeyType'
+        keyType: 'InvalidKeyType',
       };
 
-      await createDIDController(
-        mockRequest as Request,
-        mockResponse as Response,
-        mockNext
-      );
+      await createDIDController(mockRequest as Request, mockResponse as Response, mockNext);
 
       expect(mockNext).toHaveBeenCalledWith(expect.any(BadRequestError));
       expect(createDIDKey).not.toHaveBeenCalled();
@@ -106,19 +90,15 @@ describe('DID Controller', () => {
     it('should handle service errors', async () => {
       mockRequest.body = {
         method: 'key',
-        keyType: 'Ed25519'
+        keyType: 'Ed25519',
       };
 
       const error = new Error('Service error');
       (createDIDKey as jest.Mock).mockRejectedValue(error);
 
-      await createDIDController(
-        mockRequest as Request,
-        mockResponse as Response,
-        mockNext
-      );
+      await createDIDController(mockRequest as Request, mockResponse as Response, mockNext);
 
       expect(mockNext).toHaveBeenCalledWith(error);
     });
   });
-}); 
+});

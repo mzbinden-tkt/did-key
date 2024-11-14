@@ -1,7 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { BadRequestError } from '../errors';
-import { DIDDocumentOptions, createDIDKey, getGeneratorKey } from '../services';
+import {
+  DIDDocumentOptions,
+  isValidDID,
+  createDIDKey,
+  getGeneratorKey,
+  getDIDDocument,
+} from '../services';
 
 const createDIDSchema = z.object({
   method: z.literal('key'),
@@ -27,22 +33,17 @@ export const createDIDController = async (req: Request, res: Response, next: Nex
   }
 };
 
-// export const getDIDHandler = async (
-//     req: Request,
-//     res: Response,
-//     next: NextFunction
-// ) => {
-//     try {
+export const getDIDController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const did = req.params.did;
 
-//         const id = req.params.id
+    if (!isValidDID(did)) {
+      throw new BadRequestError('Invalid ID');
+    }
 
-//         if (!validate(id)) {
-//             throw new BadRequestError('Invalid ID');
-//         }
-
-//         const didDocument = await findDID(id);
-//         res.status(200).json(didDocument);
-//     } catch (error: unknown) {
-//         next(error);
-//     }
-// };
+    const didDocument = await getDIDDocument(did);
+    res.status(200).json(didDocument);
+  } catch (error: unknown) {
+    next(error);
+  }
+};

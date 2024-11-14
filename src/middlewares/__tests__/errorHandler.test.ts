@@ -12,12 +12,12 @@ describe('Error Handler Middleware', () => {
       path: '/test',
       method: 'GET',
       headers: {
-        'x-request-id': 'test-id'
-      }
+        'x-request-id': 'test-id',
+      },
     };
     mockResponse = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     mockNext = jest.fn();
     jest.clearAllMocks();
@@ -25,27 +25,27 @@ describe('Error Handler Middleware', () => {
 
   it('should handle BaseError instances correctly', () => {
     const error = new BaseError('Test error', 400, 'TEST_ERROR');
-    
+
     errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
     expect(mockResponse.status).toHaveBeenCalledWith(400);
     expect(mockResponse.json).toHaveBeenCalledWith({
       status: 'error',
       code: 'TEST_ERROR',
-      message: 'Test error'
+      message: 'Test error',
     });
   });
 
   it('should handle generic errors with 500 status code', () => {
     const error = new Error('Generic error');
-    
+
     errorHandler(error, mockRequest as Request, mockResponse as Response, mockNext);
 
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.json).toHaveBeenCalledWith({
       status: 'error',
       code: 'INTERNAL_SERVER_ERROR',
-      message: 'Internal server error'
+      message: 'Internal server error',
     });
   });
-}); 
+});

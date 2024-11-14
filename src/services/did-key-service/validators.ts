@@ -1,6 +1,6 @@
 import { InvalidDIDError } from './errors';
 import { KNOWN_KEY_TYPE, VerificationMethodTypes } from './types';
-import { parse } from 'did-resolver'
+import { parse } from 'did-resolver';
 
 export function isSupportedKeyFormat(format: VerificationMethodTypes): boolean {
   return [
@@ -24,10 +24,10 @@ export function isValidatePublicKeyLength(
 
 export function isValidDID(did: string): boolean {
   try {
-    parse(did)
-    return true
+    parse(did);
+    return true;
   } catch (error) {
-    return false
+    return false;
   }
 }
 

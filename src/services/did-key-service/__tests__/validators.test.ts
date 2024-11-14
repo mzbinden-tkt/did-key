@@ -97,4 +97,4 @@ describe('Validators', () => {
       expect(() => validateIdentifier('did', 'key', '1', 'invalid')).toThrow(InvalidDIDError);
     });
   });
-}); 
+});

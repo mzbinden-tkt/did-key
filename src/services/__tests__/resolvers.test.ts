@@ -12,16 +12,16 @@ describe('Resolvers', () => {
   describe('createDIDKey', () => {
     const mockKeyPair = {
       public: new Uint8Array([1, 2, 3]),
-      private: new Uint8Array([4, 5, 6])
+      private: new Uint8Array([4, 5, 6]),
     };
 
     const mockMultibase = 'z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK';
-    
+
     const mockDIDDocument = {
       '@context': [],
       id: `did:key:${mockMultibase}`,
       verificationMethod: [],
-      authentication: []
+      authentication: [],
     };
 
     const mockCreateKey = jest.fn().mockReturnValue(mockKeyPair);
@@ -49,13 +49,19 @@ describe('Resolvers', () => {
       const result = await createDIDKey('Secp256k1', mockCreateKey);
 
       expect(result).toEqual({ document: mockDIDDocument });
-      expect(bytesToMultibase).toHaveBeenCalledWith(mockKeyPair.public, 'base58btc', 'secp256k1-pub');
+      expect(bytesToMultibase).toHaveBeenCalledWith(
+        mockKeyPair.public,
+        'base58btc',
+        'secp256k1-pub'
+      );
     });
 
     it('should create a DID key with custom options', async () => {
-      await createDIDKey('Ed25519', mockCreateKey, {enableEncryptionKeyDerivation: true});
+      await createDIDKey('Ed25519', mockCreateKey, { enableEncryptionKeyDerivation: true });
 
-      expect(createDIDDocument).toHaveBeenCalledWith(`did:key:${mockMultibase}`, {enableEncryptionKeyDerivation: true});
+      expect(createDIDDocument).toHaveBeenCalledWith(`did:key:${mockMultibase}`, {
+        enableEncryptionKeyDerivation: true,
+      });
     });
 
     it('should propagate errors from key generation', async () => {
@@ -81,4 +87,4 @@ describe('Resolvers', () => {
       await expect(createDIDKey('Ed25519', mockCreateKey)).rejects.toThrow(error);
     });
   });
-}); 
+});

@@ -30,4 +30,4 @@ describe('Key Manager', () => {
       expect(Buffer.from(keys.public)).toEqual(Buffer.from(derivedPublicKey));
     });
   });
-}); 
+});

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createDIDController } from '../controllers/did';
+import { createDIDController, getDIDController } from '../controllers/did';
 
 /**
  * @openapi
@@ -67,6 +67,11 @@ import { createDIDController } from '../controllers/did';
  *               type: array
  *               items:
  *                 type: object
+ *     DIDResponse:
+ *       type: object
+ *       properties:
+ *         document:
+ *           $ref: '#/components/schemas/CreateDIDResponse/properties/document'
  */
 
 const router = Router();
@@ -96,5 +101,34 @@ const router = Router();
  *         description: Internal server error
  */
 router.post('/did', createDIDController);
+
+/**
+ * @openapi
+ * /did/{did}:
+ *   get:
+ *     summary: Retrieve a DID document by its identifier
+ *     tags: [DID]
+ *     parameters:
+ *       - in: path
+ *         name: did
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The DID identifier (e.g., did:key:z6Mk...)
+ *     responses:
+ *       200:
+ *         description: DID document retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/DIDResponse'
+ *       400:
+ *         description: Bad request - Invalid DID format
+ *       404:
+ *         description: DID document not found
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/did/:did', getDIDController);
 
 export default router;

@@ -90,4 +90,4 @@ describe('DID Document Service', () => {
       await expect(saveKeyPair(mockPublicKey, mockPrivateKey)).rejects.toThrow(error);
     });
   });
-}); 
+});

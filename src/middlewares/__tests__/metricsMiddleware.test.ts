@@ -15,9 +15,9 @@ describe('Metrics Middleware', () => {
       method: 'GET',
       path: '/test',
       headers: {
-        'x-request-id': 'test-id'
+        'x-request-id': 'test-id',
       },
-      get: jest.fn().mockReturnValue('test-user-agent')
+      get: jest.fn().mockReturnValue('test-user-agent'),
     };
     mockResponse = {
       statusCode: 200,
@@ -54,22 +54,21 @@ describe('Metrics Middleware', () => {
         'statusCode: 200',
         'userAgent: test-user-agent',
         'contentLength: 100',
-        'requestId: test-id'
+        'requestId: test-id',
       ])
     );
   });
 
   it('should handle missing request ID', () => {
     mockRequest.headers = {};
-    
+
     metricsMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
-    
   });
 
   it('should handle missing user agent and content length', () => {
     (mockRequest.get as jest.Mock).mockReturnValue(null);
     (mockResponse.get as jest.Mock).mockReturnValue(null);
-    
+
     metricsMiddleware(mockRequest as Request, mockResponse as Response, mockNext);
     const modifiedResponse = mockResponse as Response;
     modifiedResponse.end!();
@@ -77,10 +76,7 @@ describe('Metrics Middleware', () => {
     expect(incrementMetricTimer).toHaveBeenCalledWith(
       'response_time',
       expect.any(Number),
-      expect.arrayContaining([
-        'userAgent: unknown',
-        'contentLength: 0'
-      ])
+      expect.arrayContaining(['userAgent: unknown', 'contentLength: 0'])
     );
   });
-}); 
+});

@@ -34,27 +34,31 @@ describe('Keys Repository', () => {
 
       await saveKeys(mockKey.publicKey, mockKey.privateKey);
 
-      expect(mockCollection.insertOne).toHaveBeenCalledWith(expect.objectContaining({
-        publicKey: mockKey.publicKey,
-        privateKey: mockKey.privateKey,
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date)
-      }));
+      expect(mockCollection.insertOne).toHaveBeenCalledWith(
+        expect.objectContaining({
+          publicKey: mockKey.publicKey,
+          privateKey: mockKey.privateKey,
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
+        })
+      );
     });
 
     it('should throw BadRequestError when key is null', async () => {
-      await expect(saveKeys(null as unknown as Uint8Array, null as unknown as Uint8Array))
-        .rejects
-        .toThrow(new BadRequestError('Error saving metadata DID: Public or private key is missing'));
+      await expect(
+        saveKeys(null as unknown as Uint8Array, null as unknown as Uint8Array)
+      ).rejects.toThrow(
+        new BadRequestError('Error saving metadata DID: Public or private key is missing')
+      );
     });
 
     it('should propagate errors during save operation', async () => {
       const mockError = new Error('Insert failed');
       mockCollection.insertOne.mockRejectedValue(mockError);
 
-      await expect(saveKeys(mockKey.publicKey, mockKey.privateKey))
-        .rejects
-        .toThrow('Insert failed');
+      await expect(saveKeys(mockKey.publicKey, mockKey.privateKey)).rejects.toThrow(
+        'Insert failed'
+      );
     });
   });
-}); 
+});
