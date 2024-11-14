@@ -12,6 +12,7 @@ A Node.js service for managing Decentralized Identifiers (DIDs) built with Expre
 
 1. Clone the repository
 2. Install dependencies:
+
     npm install
 
 ## Development
